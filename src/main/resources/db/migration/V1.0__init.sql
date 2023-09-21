@@ -10,6 +10,7 @@ create table user
     email      varchar(255) null,
     first_name varchar(255) null,
     last_name  varchar(255) null,
+    age        tinyint not null default 0,
     password   varchar(255) null
 );
 

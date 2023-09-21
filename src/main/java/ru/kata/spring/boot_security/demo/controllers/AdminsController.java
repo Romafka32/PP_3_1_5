@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -20,31 +22,14 @@ public class AdminsController {
     private final RoleRepository roleRepository;
 
     @GetMapping
-    public String getAllUsers(ModelMap model) {
+    public String getAllUsers(@ModelAttribute("user") User user, ModelMap model) {
         model.addAttribute("users", userService.getAllUsers());
-
-        return "users";
-    }
-
-    @GetMapping("/{id}")
-    public String getOneUser(@PathVariable("id") Long id, ModelMap model) {
-        model.addAttribute("user", userService.findById(id));
-        return "details";
-    }
-
-    @GetMapping("/new")
-    public String newUser(@ModelAttribute("user") User user, ModelMap model) {
         List<Role> roles = roleRepository.findAll();
         model.addAttribute("allRoles", roles);
-        return "new";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String editUser(@PathVariable("id") Long id, ModelMap model) {
-        List<Role> roles = roleRepository.findAll();
-        model.addAttribute("user", userService.findById(id));
-        model.addAttribute("allRoles", roles);
-        return "edit";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        model.addAttribute("userA",currentUser);
+        return "admin-page";
     }
 
     @PostMapping()
@@ -54,7 +39,7 @@ public class AdminsController {
     }
 
     @PatchMapping("/{id}")
-    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") Long id) {
+    public String updateUser(@ModelAttribute("user") User user) {
         userService.updateUser(user);
         return "redirect:/";
     }

@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ru.kata</groupId>
-	<artifactId>PP_3_1_2_Boot_security</artifactId>
+	<artifactId>PP_3_1_4</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-boot_security-demo</name>
 	<description>Demo project for Spring Boot</description>
@@ -31,6 +31,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>

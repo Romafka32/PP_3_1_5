@@ -26,6 +26,7 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private String email;
+    private Byte age;
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
