@@ -1,17 +1,17 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.dto.UserDto;
+import ru.kata.spring.boot_security.demo.mapper.UserMapper;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -22,46 +22,51 @@ public class UserServiceImpl implements UserService {
     public final UserRepository userRepository;
     public final RoleRepository roleRepository;
     public final PasswordEncoder passwordEncoder;
+    public final UserMapper userMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        return userRepository
-                .findByEmail(userName)
-                .orElseThrow(() -> new UsernameNotFoundException("Email " + userName + " not found"));
-    }
-    @Override
-    public void createUser(User user) {
-        if (userRepository.findByEmail(user.getUsername()).isEmpty()) {
+    public void createUser(UserDto user) {
+        if (userRepository.findByEmail(userMapper.toEntity(user).getUsername()).isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
+            userRepository.save(userMapper.toEntity(user));
         }
     }
+
     @Override
-    public void updateUser(User user) {
+    public void updateUser(UserDto user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        userRepository.save(
+                userMapper.toEntity(user));
     }
+
     @Override
     @Transactional(readOnly = true)
-    public User findById(Long id) {
-        Optional<User> userFromDb = userRepository.findById(id);
-        return userFromDb.orElse(new User());
+    public UserDto findById(Long id) {
+        return userMapper.toDto(
+                userRepository.findById(id)
+                        .orElse(new User()));
     }
+
     @Override
     @Transactional(readOnly = true)
-    public User findByEmail(String email) {
-        Optional<User> userFromDb = userRepository.findByEmail(email);
-        return userFromDb.orElse(new User());
+    public UserDto findByEmail(String email) {
+        return userMapper.toDto(
+                userRepository.findByEmail(email)
+                        .orElse(new User()));
+
     }
+
     @Override
     public void removeUserById(Long id) {
         if (userRepository.findById(id).isPresent()) {
             userRepository.deleteById(id);
         }
     }
+
     @Override
     @Transactional(readOnly = true)
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(userMapper::toDto).collect(Collectors.toList());
     }
 }

@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.controllers;
+package ru.kata.spring.boot_security.demo.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
