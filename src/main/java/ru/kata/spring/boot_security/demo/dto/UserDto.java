@@ -10,15 +10,11 @@ import java.util.Set;
 public class UserDto {
 
     private Long id;
-    private String firstName;
+    private String username;
     private String lastName;
     private String email;
     private Byte age;
     private String password;
     private Set<Role> roles;
-
-    public String getUsername() {
-        return getEmail();
-    }
 }
 

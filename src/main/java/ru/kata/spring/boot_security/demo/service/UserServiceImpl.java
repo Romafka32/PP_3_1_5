@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(UserDto user) {
-        if (userRepository.findByEmail(userMapper.toEntity(user).getUsername()).isEmpty()) {
+        if (userRepository.findByUsername(userMapper.toEntity(user).getUsername()).isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(userMapper.toEntity(user));
         }
@@ -49,9 +49,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDto findByEmail(String email) {
+    public UserDto findByUsername(String username) {
         return userMapper.toDto(
-                userRepository.findByEmail(email)
+                userRepository.findByUsername(username)
                         .orElse(new User()));
 
     }

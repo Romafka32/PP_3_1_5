@@ -1,9 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.kata.spring.boot_security.demo.dto.UserDto;
-import ru.kata.spring.boot_security.demo.model.User;
-
 import java.util.List;
 
 public interface UserService {
@@ -14,7 +11,7 @@ public interface UserService {
 
     UserDto findById(Long id);
 
-    UserDto findByEmail(String email);
+    UserDto findByUsername(String username);
 
     void removeUserById(Long id);
 
