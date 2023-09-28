@@ -264,8 +264,7 @@ async function deleteUser() {
         },
         body: JSON.stringify({
             username: form_del.username.value,
-            email: form_del.email.value,
-            password: form_del.password.value,
+            email: form_del.email.value
         })
     }
     await fetch(urlDel, method).then(() => {
